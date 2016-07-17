@@ -12,7 +12,7 @@ Get it from  [![](https://jitpack.io/v/yannick-cw/nyt4s.svg)](https://jitpack.io
 sbt:
 ```scala
 resolvers += "jitpack" at "https://jitpack.io"
-libraryDependencies += "com.github.yannick-cw" % "nyt4s" % "v0.01"	
+libraryDependencies += "com.github.yannick-cw" % "nyt4s" % "0.01"	
 ```
 
  1. To get started you need to add the import `import nytSearchDsl._` to your class.
