@@ -23,17 +23,17 @@ trait ResponseTransformation extends Protocols with Flows {
     futureRes.flatMap(response => response.status match {
       case OK => Unmarshal(response.entity).to[Outter].map(_.response)
       case Forbidden => Future.failed(new IllegalArgumentException("Please check your api key, seems to be invalid"))
-      case BadRequest =>
+      case _ =>
         response.entity.dataBytes.runWith(Sink.head).map(_.utf8String).flatMap { str =>
           Future.failed(new IllegalArgumentException(str))
         }
     }).map(_.docs)
   }
 
-  def reponseAsStream(source: Source[HttpResponse, Any]): Source[Doc, Any] =
+  def responseAsStream(source: Source[HttpResponse, Any]): Source[Doc, Any] =
     source
       .via(checkHttpStatus)
-      .via(Framing.delimiter(ByteString(delimeter), 80000, true))
+      .via(Framing.delimiter(ByteString(delimeter), 80000, allowTruncation = true))
       .map(_.utf8String)
       .drop(1)
       .via(readdDelimiter)

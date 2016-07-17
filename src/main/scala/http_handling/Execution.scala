@@ -49,7 +49,7 @@ object Execution extends ResponseTransformation {
     val simpleFlow = Source.single(req)
       .via(connecFlow)
 
-    reponseAsStream(simpleFlow)
+    responseAsStream(simpleFlow)
   }
 
 }

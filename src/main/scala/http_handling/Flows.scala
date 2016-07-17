@@ -27,14 +27,14 @@ trait Flows extends Protocols {
           response.entity.dataBytes.runWith(Sink.ignore)
           Source.failed(new IllegalArgumentException("Please check your api key, seems to be invalid"))
 
-        case BadRequest =>
+        case _ =>
           response.entity.dataBytes.runWith(Sink.ignore)
           Source.failed(new IllegalArgumentException("Something went wrong, check your query"))
       }
     }
 
   val cutGarbage =
-    Flow[String].map(s => if (s.endsWith(jsonEnding)) s.dropRight(jsonEnding.size) else s)
+    Flow[String].map(s => if (s.endsWith(jsonEnding)) s.dropRight(jsonEnding.length) else s)
 
   val readdDelimiter = Flow[String].map(str => delimeter + str)
 
