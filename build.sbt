@@ -8,10 +8,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" % "akka-stream_2.11" % akkaV,
   "com.typesafe.akka" % "akka-testkit_2.11" % akkaV,
   "com.typesafe.akka" % "akka-http-spray-json-experimental_2.11" % akkaV,
-  "joda-time" % "joda-time" % "2.9.4",
-  "com.github.yannick-cw" % "nyt4s" % "master-SNAPSHOT"
+  "joda-time" % "joda-time" % "2.9.4"
 )
 
 lazy val akkaV: String = "2.4.8"
-
-resolvers += "jitpack" at "https://jitpack.io"
