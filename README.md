@@ -8,7 +8,12 @@ For more information on the new york times api visit: https://developer.nytimes.
 
 ### Quickstart
 
-//todo dependency
+Get it from  [![](https://jitpack.io/v/yannick-cw/nyt4s.svg)](https://jitpack.io/#yannick-cw/nyt4s)
+sbt:
+```scala
+resolvers += "jitpack" at "https://jitpack.io"
+	libraryDependencies += "com.github.yannick-cw" % "nyt4s" % "v0.01"	
+```
 
  1. To get started you need to add the import `import nytSearchDsl._` to your class.
  2. define your search: `val toSearch = search query "what to search" highlighting true` and add additional parameters like highlighting

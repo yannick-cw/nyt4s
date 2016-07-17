@@ -77,10 +77,9 @@ case class SearchDefinition(
     * Execute async
     *
     * @param key put in your nytimes api key here
-    * @throws java.lang.IllegalArgumentException if api key is wrong or search term is invalid
     * @return Future[Docs] containing a list of the result docs
+    * if the api key is wrong or search term is invalid the future fails with IllegalArgumentException
     */
-  @throws(classOf[IllegalArgumentException])
   def execute(key: String): Future[List[Doc]] = Execution.execute(this, key)
 
   /**
