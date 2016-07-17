@@ -4,16 +4,26 @@ nyt4s is a non blocking, type safe DSL for the New York Times rest api.
 
 You need to get an nyt api key [here](https://developer.nytimes.com/signup).
 
-For more information on the new york ties api visit: https://developer.nytimes.com/signup
+For more information on the new york times api visit: https://developer.nytimes.com/
 
-### Example usage
+### Quickstart
+
+//todo dependency
+
+ 1. To get started you need to add the import `import nytSearchDsl._` to your class.
+ 2. define your search: `val toSearch = search query "what to search" highlighting true` and add additional parameters like highlighting
+ 3. execute your search either as streaming result or future result `toSearch execute "api key"` or `toSearch executeAsStream "api key"`
+
+
+### Examples
 
 This is a basic search with the future based execution
 ```scala
 import nytSearchDsl._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 val basicSearch = search query "scala"
-val futureDocs: Future[Docs] = basicSearch execute "your nyt api key here"
+val futureDocs: Future[List[Doc]] = basicSearch execute "your nyt api key here"
 
 futureDocs.onSuccess {
    case listOfDocs => listOfDocs.foreach(println) 
@@ -38,7 +48,7 @@ futureDocs.runForeach(println)
 ```
 
 
-### Additional search parameters
+#### Additional search parameters
 
 There are some parameters to specify the search:
 
