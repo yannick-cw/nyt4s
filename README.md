@@ -53,6 +53,6 @@ search with all parameters
 import org.joda.time.LocalDate
 
 val date = LocalDate.now
-search query "New York Times" endDate date.p startDate date.minusDays(100) filter "filter" highlight true sort newest
+search query "New York Times" endDate date startDate date.minusDays(100) filter "filter" highlight true sort newest
 
 ```
