@@ -19,7 +19,7 @@ trait ResponseTransformation extends Protocols with Flows {
   implicit val system: ActorSystem
   implicit val materializer: ActorMaterializer
 
-  def responseToDocs(futureRes: Future[HttpResponse]): Future[Docs] = {
+  def responseToDocs(futureRes: Future[HttpResponse]): Future[List[Doc]] = {
     futureRes.flatMap(response => response.status match {
       case OK => Unmarshal(response.entity).to[Outter].map(_.response)
       case Forbidden => Future.failed(new IllegalArgumentException("Please check your api key, seems to be invalid"))
@@ -27,7 +27,7 @@ trait ResponseTransformation extends Protocols with Flows {
         response.entity.dataBytes.runWith(Sink.head).map(_.utf8String).flatMap { str =>
           Future.failed(new IllegalArgumentException(str))
         }
-    })
+    }).map(_.docs)
   }
 
   def reponseAsStream(source: Source[HttpResponse, Any]): Source[Doc, Any] =

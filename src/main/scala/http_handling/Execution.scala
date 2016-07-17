@@ -5,8 +5,8 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.Uri.Query
 import akka.http.scaladsl.model.{HttpRequest, Uri}
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.{Sink, Source}
-import models.docs.{Doc, Docs}
+import akka.stream.scaladsl.Source
+import models.docs.Doc
 import nytSearchDsl.SearchDefinition
 
 import scala.concurrent.Future
@@ -39,7 +39,7 @@ object Execution extends ResponseTransformation {
     val req = HttpRequest(uri = searchDefToURI(searchDefinition, key))
     val futureResponse = Http().singleRequest(req)
 
-    responseToDocs(futureResponse).map(_.docs)
+    responseToDocs(futureResponse)
   }
 
   def executeAsStream(searchDefinition: SearchDefinition, key: String): Source[Doc, Any] = {

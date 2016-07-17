@@ -1,8 +1,8 @@
 ### nyt4s - New York times scala api
 
-nyt4s is non blocking, type safe DSL for the New York Times rest api.  
+nyt4s is a non blocking, type safe DSL for the New York Times rest api.  
 
-You need to get a nyt api key [here](https://developer.nytimes.com/).
+You need to get an nyt api key [here](https://developer.nytimes.com/).
 
 #### Example usage
 
@@ -14,7 +14,7 @@ val basicSearch = search query "scala"
 val futureDocs: Future[Docs] = basicSearch execute "your nyt api key here"
 
 futureDocs.onSuccess {
-               case listOfDocs => listOfDocs.foreach(println) 
+   case listOfDocs => listOfDocs.foreach(println) 
 }
 ```
 
