@@ -13,7 +13,7 @@ trait Protocols extends DefaultJsonProtocol with SprayJsonSupport {
   implicit val personFormat = jsonFormat5(Person)
   implicit val bylineFormat = jsonFormat2(Byline)
   implicit val multimediaFormat = jsonFormat8(Multimedia)
-  implicit val docFormat = jsonFormat20(Doc)
+  implicit val docFormat = jsonFormat19(Doc)
   implicit val docsFormat = jsonFormat1(Docs)
   implicit val outterFormat = jsonFormat1(Outter)
 }

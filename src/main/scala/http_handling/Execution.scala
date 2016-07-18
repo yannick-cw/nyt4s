@@ -1,7 +1,6 @@
 package http_handling
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.Uri.Query
 import akka.http.scaladsl.model.{HttpRequest, Uri}
 import akka.stream.ActorMaterializer
@@ -15,7 +14,7 @@ import scala.concurrent.Future
 /**
   * Executes the search to nytimes
   */
-object Execution extends ResponseTransformation {
+object Execution extends RequestToResponse {
 
   implicit val system = ActorSystem()
   implicit val materializer = ActorMaterializer()
@@ -35,21 +34,16 @@ object Execution extends ResponseTransformation {
     Uri(url).withQuery(Query(params))
   }
 
-  def execute(searchDefinition: SearchDefinition, key: String): Future[List[Doc]] = {
+  def execute(searchDefinition: SearchDefinition, key: String): Future[Seq[Doc]] = {
     val req = HttpRequest(uri = searchDefToURI(searchDefinition, key))
-    val futureResponse = Http().singleRequest(req)
 
-    responseToDocs(futureResponse)
+    responseToDocs(req, host)
   }
 
   def executeAsStream(searchDefinition: SearchDefinition, key: String): Source[Doc, Any] = {
     val req = HttpRequest(uri = searchDefToURI(searchDefinition, key))
 
-    val connecFlow = Http().outgoingConnection(host)
-    val simpleFlow = Source.single(req)
-      .via(connecFlow)
-
-    responseAsStream(simpleFlow)
+    responseAsStream(req, host)
   }
 
 }

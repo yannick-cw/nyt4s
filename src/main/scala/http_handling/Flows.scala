@@ -1,12 +1,16 @@
 package http_handling
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.Http.OutgoingConnection
+import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
 import akka.http.scaladsl.model.StatusCodes._
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import models.docs.Doc
 import spray.json.JsonParser
+
+import scala.concurrent.Future
 
 /**
   * The flows used for handling the http response
@@ -41,5 +45,7 @@ trait Flows extends Protocols {
   val removeTrailingComma = Flow[String].map(str => if (str.last == ',') str.dropRight(1) else str)
 
   val deserialize = Flow[String].map(str => JsonParser(str).convertTo[Doc])
+
+  val connecFlow: String => Flow[HttpRequest, HttpResponse, Future[OutgoingConnection]] = host => Http().outgoingConnection(host)
 
 }

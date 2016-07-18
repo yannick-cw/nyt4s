@@ -80,7 +80,7 @@ case class SearchDefinition(
     * @return Future[Docs] containing a list of the result docs
     * if the api key is wrong or search term is invalid the future fails with IllegalArgumentException
     */
-  def execute(key: String): Future[List[Doc]] = Execution.execute(this, key)
+  def execute(key: String): Future[Seq[Doc]] = Execution.execute(this, key)
 
   /**
     * Executs search an returns a stream of docs
