@@ -19,7 +19,7 @@ trait Flows extends Protocols {
   implicit val system: ActorSystem
   implicit val materializer: ActorMaterializer
 
-  val jsonEnding: String = """]},"status":"OK","copyright":"Copyright (c) 2013 The New York Times Company.  All Rights Reserved."}"""
+  val jsonEnding: String = """]},"status":"OK","copyright":"Copyright"""
   val delimeter: String = """{"web_url":"""
 
   val checkHttpStatus =
@@ -32,13 +32,14 @@ trait Flows extends Protocols {
           Source.failed(new IllegalArgumentException("Please check your api key, seems to be invalid"))
 
         case _ =>
-          response.entity.dataBytes.runWith(Sink.ignore)
+          response.entity.dataBytes.map(_.utf8String).runForeach(println)
+          response.headers.foreach(println)
           Source.failed(new IllegalArgumentException("Something went wrong, check your query"))
       }
     }
 
   val cutGarbage =
-    Flow[String].map(s => if (s.endsWith(jsonEnding)) s.dropRight(jsonEnding.length) else s)
+    Flow[String].map(s => s.split(jsonEnding).head)
 
   val readdDelimiter = Flow[String].map(str => delimeter + str)
 

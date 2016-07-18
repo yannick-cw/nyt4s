@@ -39,7 +39,7 @@ case class Doc(web_url: Option[String],
                byline: Option[Byline],
                type_of_material: Option[String],
                _id: Option[String],
-//               word_count: Option[String],
+               word_count: Option[String],
                slideshow_credits: Option[String],
                multimedia: List[Multimedia]
               )
