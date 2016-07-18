@@ -22,8 +22,9 @@ trait RequestToResponse extends Protocols with Flows {
   }
 
   def responseAsStream(httpReq: Seq[HttpRequest], host: String): Source[Doc, Any] =
-    Source(httpReq.toList)
+    Source(httpReq.toList.map(_ -> 1))
       .via(connecFlow(host))
+      .via(dropBrokenRequests)
       .via(checkHttpStatus)
       .via(Framing.delimiter(ByteString(delimiter), 80000, allowTruncation = true))
       .drop(1)

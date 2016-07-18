@@ -1,8 +1,9 @@
 package http_handling
 
+import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.Http.OutgoingConnection
+import akka.http.scaladsl.Http.{HostConnectionPool, OutgoingConnection}
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCodes}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
@@ -39,7 +40,11 @@ trait Flows extends Protocols {
     }
   }
 
-  val connecFlow: String => Flow[HttpRequest, HttpResponse, Future[OutgoingConnection]] = host => Http().outgoingConnection(host)
+  val dropBrokenRequests = Flow[(Try[HttpResponse], Int)]
+    .map(_._1)
+    .collect{ case Success(httpRes) => httpRes }
+
+  val connecFlow: String => Flow[(HttpRequest, Int), (Try[HttpResponse], Int), HostConnectionPool] = host => Http().cachedHostConnectionPool[Int](host)
 
   val checkHttpStatus =
     Flow[HttpResponse].flatMapConcat { response =>
