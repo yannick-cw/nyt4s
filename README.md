@@ -12,7 +12,7 @@ Get it from  [![](https://jitpack.io/v/yannick-cw/nyt4s.svg)](https://jitpack.io
 sbt:
 ```scala
 resolvers += "jitpack" at "https://jitpack.io"
-libraryDependencies += "com.github.yannick-cw" % "nyt4s" % "0.02"	
+libraryDependencies += "com.github.yannick-cw" % "nyt4s" % "0.03"	
 ```
 
  1. To get started you need to add the import `import nytSearchDsl._` to your class.
@@ -63,6 +63,7 @@ There are some parameters to specify the search:
  * `endDate` Restricts responses to results with publication dates of the date specified or earlier.
  * `sort` By default, search results are sorted by their relevance to the query term (q). Use the sort parameter to sort by pub_date.
  * `highlight` Enables highlighting in search results. When set to true, the query term (q) is highlighted in the headline and lead_paragraph fields.
+ * `limit` limit how many pages (each has 10 docs) should be collected, the maximum is currently at 101 pages due to nyt api
 
 #### More examples
 
@@ -71,7 +72,9 @@ search with all parameters
 import org.joda.time.LocalDate
 
 val date = LocalDate.now
-search query "New York Times" endDate date startDate date.minusDays(100) filter "filter" highlight true sort newest
+val startDate = date.minusDays(100)
+
+search query "Test" endDate date startDate startDate filter "filter" highlight true sort newest limit 5
 
 ```
 
@@ -99,7 +102,7 @@ As a result you either get a Stream of `Doc` or a List of `Doc`.
                 byline: Byline,
                 type_of_material: Option[String],
                 _id: Option[String],
-                word_count: Option[String],
+               // word_count: Option[String],
                 slideshow_credits: Option[String],
                 multimedia: List[Multimedia]
                )
