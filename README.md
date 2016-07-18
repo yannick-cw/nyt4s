@@ -1,4 +1,4 @@
-## nyt4s - New York times scala api
+## nyt4s - New York times scala api wrapper
 
 nyt4s is a non blocking, type safe DSL for the New York Times rest api.  
 
