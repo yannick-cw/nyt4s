@@ -28,7 +28,7 @@ import nytSearchDsl._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 val basicSearch = search query "scala"
-val futureDocs: Future[List[Doc]] = basicSearch execute "your nyt api key here"
+val futureDocs: Future[Seq[Doc]] = basicSearch execute "your nyt api key here"
 
 futureDocs.onSuccess {
    case listOfDocs => listOfDocs.foreach(println) 
