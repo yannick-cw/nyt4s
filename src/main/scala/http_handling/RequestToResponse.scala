@@ -2,7 +2,7 @@ package http_handling
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.HttpRequest
-import akka.stream.{ActorMaterializer, Supervision}
+import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Framing, Sink, Source}
 import akka.util.ByteString
 import models.docs.Doc
@@ -25,11 +25,10 @@ trait RequestToResponse extends Protocols with Flows {
     Source(httpReq.toList)
       .via(connecFlow(host))
       .via(checkHttpStatus)
-      .via(Framing.delimiter(ByteString(delimeter), 80000, allowTruncation = true))
-      .map(_.utf8String)
+      .via(Framing.delimiter(ByteString(delimiter), 80000, allowTruncation = true))
       .drop(1)
+      .map(_.utf8String)
       .via(readdDelimiter)
-      .via(removeTrailingComma)
-      .via(cutGarbage)
       .via(deserialize)
-}
+      .mapConcat(_.response.docs)
+  }

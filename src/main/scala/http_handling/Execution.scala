@@ -3,7 +3,7 @@ package http_handling
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.Uri.Query
 import akka.http.scaladsl.model.{HttpRequest, Uri}
-import akka.stream.{ActorMaterializer, ActorMaterializerSettings, Supervision}
+import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
 import models.docs.Doc
 import nytSearchDsl.SearchDefinition
@@ -16,14 +16,8 @@ import scala.concurrent.Future
   */
 object Execution extends RequestToResponse {
 
-  val decider: Supervision.Decider = {
-    case ex: spray.json.DeserializationException =>
-      ex.printStackTrace()
-      Supervision.Resume
-  }
-
   implicit val system = ActorSystem()
-  implicit val materializer = ActorMaterializer(ActorMaterializerSettings(system).withSupervisionStrategy(decider))
+  implicit val materializer = ActorMaterializer()
 
   val host = """api.nytimes.com"""
   val url = """https://api.nytimes.com/svc/search/v2/articlesearch.json"""
@@ -37,7 +31,9 @@ object Execution extends RequestToResponse {
       searchDef.opSort.map("sort" -> _.toString) ++
       searchDef.opHighlight.map("hl" -> _.toString)
 
-    (0 to 9).map { page =>
+    val maxAllowedPages: Int = math.min(101, searchDef.opLimit)
+
+    (0 until maxAllowedPages).map { page =>
       Uri(url).withQuery(Query(params + ("page" -> page.toString)))
     }
   }

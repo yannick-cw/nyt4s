@@ -1,9 +1,9 @@
 package nytSearchDsl
 
 import akka.stream.scaladsl.Source
-import models.docs.{Doc, Docs}
-import org.joda.time.LocalDate
 import http_handling.Execution
+import models.docs.Doc
+import org.joda.time.LocalDate
 
 import scala.concurrent.Future
 
@@ -17,7 +17,8 @@ case class SearchDefinition(
                              opStartDate: Option[String] = None,
                              opEndDate: Option[String] = None,
                              opSort: Option[Sort] = None,
-                             opHighlight: Option[Boolean] = None
+                             opHighlight: Option[Boolean] = None,
+                             opLimit: Int = 10
                            ) {
 
   /**
@@ -28,7 +29,7 @@ case class SearchDefinition(
     */
   def filter(filter: String): SearchDefinition =
     SearchDefinition(
-      query, Some(filter), opStartDate, opEndDate, opSort, opHighlight)
+      query, Some(filter), opStartDate, opEndDate, opSort, opHighlight, opLimit)
 
   /**
     * Restricts responses to results with publication dates of the date specified or later.
@@ -38,7 +39,7 @@ case class SearchDefinition(
     */
   def startDate(startDate: LocalDate): SearchDefinition =
     SearchDefinition(
-      query, opFilter, Some(startDate), opEndDate, opSort, opHighlight)
+      query, opFilter, Some(startDate), opEndDate, opSort, opHighlight, opLimit)
 
   /**
     * Restricts responses to results with publication dates of the date specified or earlier.
@@ -48,7 +49,7 @@ case class SearchDefinition(
     */
   def endDate(endDate: LocalDate): SearchDefinition =
     SearchDefinition(
-      query, opFilter, opStartDate, Some(endDate), opSort, opHighlight)
+      query, opFilter, opStartDate, Some(endDate), opSort, opHighlight, opLimit)
 
   /**
     * By default, search results are sorted by their relevance to the query term (q). Use the sort parameter to sort by pub_date.
@@ -61,7 +62,7 @@ case class SearchDefinition(
     */
   def sort(sort: Sort): SearchDefinition =
     SearchDefinition(
-      query, opFilter, opStartDate, opEndDate, Some(sort), opHighlight)
+      query, opFilter, opStartDate, opEndDate, Some(sort), opHighlight, opLimit)
 
   /**
     * Enables highlighting in search results. When set to true, the query term (q) is highlighted in the headline and lead_paragraph fields.
@@ -71,7 +72,17 @@ case class SearchDefinition(
     */
   def highlight(highlight: Boolean): SearchDefinition =
     SearchDefinition(
-      query, opFilter, opStartDate, opEndDate, opSort, Some(highlight))
+      query, opFilter, opStartDate, opEndDate, opSort, Some(highlight), opLimit)
+
+  /**
+    * Maximum number of pages queried, 10 docs per page
+    * 101 pages is the maximum allowed
+    * @param limit
+    * @return
+    */
+  def limit(limit: Int): SearchDefinition =
+    SearchDefinition(
+      query, opFilter, opStartDate, opEndDate, opSort, opHighlight, limit)
 
   /**
     * Execute async

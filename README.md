@@ -18,7 +18,8 @@ libraryDependencies += "com.github.yannick-cw" % "nyt4s" % "0.02"
  1. To get started you need to add the import `import nytSearchDsl._` to your class.
  2. define your search: `val toSearch = search query "what to search" highlighting true` and add additional parameters like highlighting
  3. execute your search either as streaming result or future result `toSearch execute "api key"` or `toSearch executeAsStream "api key"`
-
+ 
+Currently 1000 results is the maximum possible due to limits of the api.
 
 ### Examples
 
