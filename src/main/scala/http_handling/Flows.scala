@@ -1,9 +1,8 @@
 package http_handling
 
-import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.Http.{HostConnectionPool, OutgoingConnection}
+import akka.http.scaladsl.Http.HostConnectionPool
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCodes}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Flow, Sink, Source}
@@ -11,7 +10,6 @@ import akka.util.ByteString
 import models.docs.Outter
 import spray.json.JsonParser
 
-import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -57,7 +55,6 @@ trait Flows extends Protocols {
 
         case _ =>
           response.entity.dataBytes.map(_.utf8String).runForeach(println)
-          response.headers.foreach(println)
           Source.failed(new IllegalArgumentException("Something went wrong, check your query"))
       }
     }
