@@ -19,7 +19,7 @@ libraryDependencies += "com.github.yannick-cw" % "nyt4s" % "0.04"
  2. define your search: `val toSearch = search query "what to search" highlighting true` and add additional parameters like highlighting
  3. execute your search either as streaming result or future result `toSearch execute "api key"` or `toSearch executeAsStream "api key"`
  
-Currently 1000 results is the maximum possible due to limits of the api.
+Currently 1000 results is the maximum possible due to limits of the nyts api. The response time is capped by the maximum allowed request per seconds bey nyts api.
 
 ### Examples
 
@@ -63,7 +63,7 @@ There are some parameters to specify the search:
  * `endDate` Restricts responses to results with publication dates of the date specified or earlier.
  * `sort` By default, search results are sorted by their relevance to the query term (q). Use the sort parameter to sort by pub_date.
  * `highlight` Enables highlighting in search results. When set to true, the query term (q) is highlighted in the headline and lead_paragraph fields.
- * `limit` limit how many pages (each has 10 docs) should be collected, the maximum is currently at 101 pages due to nyt api
+ * `limit` limit how many pages (each has 10 docs) should be collected, the maximum is currently at 101 pages due to nyt api, defaults to 10 pages
 
 #### More examples
 
