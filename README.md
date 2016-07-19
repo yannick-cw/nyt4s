@@ -19,7 +19,7 @@ libraryDependencies += "com.github.yannick-cw" % "nyt4s" % "0.04"
  2. define your search: `val toSearch = search query "what to search" highlighting true` and add additional parameters like highlighting
  3. execute your search either as streaming result or future result `toSearch execute "api key"` or `toSearch executeAsStream "api key"`
  
-Currently 1000 results is the maximum possible due to limits of the nyts api. The response time is capped by the maximum allowed request per seconds bey nyts api.
+Currently 1000 results is the maximum possible due to limits of the nyts api. The response time is capped by the maximum allowed request per seconds by nyts api.
 
 ### Examples
 
